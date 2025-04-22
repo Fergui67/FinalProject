@@ -26,6 +26,8 @@ class SudokuGenerator:
     def __init__(self, removed_cells, row_length=9, ):
         self.row_length = row_length
         self.removed_cells = removed_cells
+        self.box_length = 3 
+        self.board = [[0 for _ in range(row_length)] for _ in range(row_length)] 
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -34,11 +36,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-        screenWidth = 800
-        screenHeight = 600
-        screen = pygame.display.set_mode((screenWidth,screenHeight))
-        return screen
-
+        return self.board
     '''
 	Displays the board to the console
     This is not strictly required, but it may be useful for debugging purposes
@@ -175,7 +173,7 @@ class SudokuGenerator:
     '''
     def fill_values(self):
         self.fill_diagonal()
-        self.fill_remaining(0, self.row_length)
+        self.fill_remaining(0, self.box_length)
 
     '''
     Removes the appropriate number of cells from the board
@@ -216,10 +214,20 @@ def generate_sudoku(size, removed):
     return board
 
 pygame.init()
-generate_sudoku(9,0)
+screen = pygame.display.set_mode((600, 600))  
+
+# Generating board
+
+sudoku = SudokuGenerator(removed_cells=0)
+sudoku.fill_values()
+board = sudoku.get_board()
 
 run = True
 while run:
-    for event in pygame.event.get():
+    for event in pygame.event.get(): # SCreen window loop
         if event.type == pygame.QUIT:
             run = False
+
+    screen.fill((255,255,255))
+
+    pygame.display.flip()
