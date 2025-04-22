@@ -45,7 +45,16 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        pass
+        for i in range(self.row_length):
+            row = ""
+            for j in range(self.row_length):
+                num = self.board[i][j]
+                if j % 3 == 0 and j != 0:
+                    row += "| "
+                row += f"{num if num != 0 else '.'} "
+            print(row)
+            if (i + 1) % 3 == 0 and i != 8:
+                print("-" * 21)
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -223,6 +232,7 @@ sudoku.fill_values()
 board = sudoku.get_board()
 
 run = True
+run2 = True
 while run:
     for event in pygame.event.get(): # SCreen window loop
         if event.type == pygame.QUIT:
@@ -231,3 +241,7 @@ while run:
     screen.fill((255,255,255))
 
     pygame.display.flip()
+    
+def test():
+    sudoku.print_board()
+test()
