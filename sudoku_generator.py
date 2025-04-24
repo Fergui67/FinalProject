@@ -67,7 +67,7 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        pass
+        return num not in self.board[row] # Since there is a list at each row, we use this to check if there is the number already on the list
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -80,7 +80,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-        pass
+        for i in range(self.row_length): # Fro columsns we need to check that the index of the column representing where we are trying to place a number gets checked for every list (every row) because there is no directly a column list
+            if self.board[i][col] == num: # [i][col] Here we check i (index) at the specified column (col)
+                return False
+        return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -95,7 +98,12 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-        pass
+        for i in range (self.box_length): # We only need to loop through 3 times for a row
+            for j in range(self.box_length): # And 3 times for a column
+                if self.board[row_start+i][col_start+j]: # Unlike the past two functions, neither col nor row are fixed, so here we check for the three numbers in the list for the row and then move to the next row by checking the indexes, row_start only adds after if goes through the columns.
+                    return False
+        return True
+
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -108,8 +116,22 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
-        pass
+        valid = True  # create a true variable boolean
 
+        # If statement to check if the number is in that row, if it is, make the variable false
+        if not self.valid_in_row(row, num):
+            valid = False
+
+        # If statement to check if the number is in that col, if it is, make the variable false
+        if not self.valid_in_col(col, num):
+            valid = False
+
+        # If statement to check if the number is in that box, if it is, make the variable false
+        box_row_start = row - (row % self.box_length)
+        box_col_start = col - (col %self.box_length)
+        if not self.valid_in_box(box_row_start,box_col_start,num):
+            valid = False
+        return valid
     '''
     Fills the specified 3x3 box with values
     For each position, generates a random digit which has not yet been used in the box
