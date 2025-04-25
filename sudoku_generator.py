@@ -100,7 +100,7 @@ class SudokuGenerator:
     def valid_in_box(self, row_start, col_start, num):
         for i in range (self.box_length): # We only need to loop through 3 times for a row
             for j in range(self.box_length): # And 3 times for a column
-                if self.board[row_start+i][col_start+j]: # Unlike the past two functions, neither col nor row are fixed, so here we check for the three numbers in the list for the row and then move to the next row by checking the indexes, row_start only adds after if goes through the columns.
+                if self.board[row_start+i][col_start+j] == num: # Unlike the past two functions, neither col nor row are fixed, so here we check for the three numbers in the list for the row and then move to the next row by checking the indexes, row_start only adds after if goes through the columns.
                     return False
         return True
 
@@ -143,7 +143,12 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-        pass
+        for i in range(row_start, row_start + 3): # Checks the three rows in the box
+            for j in range(col_start, col_start + 3): # Checks the three columns in the box
+                num = random.randint(1, 9) # Generates random number from 1 to 9
+                while not self.valid_in_box(row_start, col_start, num):
+                    num = random.randint(1, 9) # Checks if the generated number is already in the box, if it is, generates until it is a new number
+                self.board[i][j] = num # Replaces 0 with number
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -153,7 +158,8 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-        pass
+        for i in range(0, self.row_length - 1, 3):
+            self.fill_box(i, i) # Uses fill_box command from earlier to fill the three diagonal boxes
 
     '''
     DO NOT CHANGE
@@ -219,7 +225,15 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        pass
+        x = 0
+        while x < self.removed_cells: # Tracks how many removed cells there are until it stops once it reaches the required amount
+            rand_row = random.randint(0, 8) # Generates random row
+            rand_col = random.randint(0, 8) # Generates random column
+            if self.board[rand_row][rand_col] != 0:
+                self.board[rand_row][rand_col] = 0 # If no 0 is present already, replaces number with 0
+            else:
+                continue # If 0 is already present, skips it
+            x = x + 1
 
 '''
 DO NOT CHANGE
