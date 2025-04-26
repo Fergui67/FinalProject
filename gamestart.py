@@ -1,6 +1,12 @@
 import pygame
 import sys
 from sudoku_generator import SudokuGenerator
+def boards_match(sol, playerBoard):
+    for r in range(9):
+        for c in range(9):
+            if sol[r][c] != playerBoard[r][c]:
+                return False
+    return True
 def gameWonScreen():
     running = True
     while running:
@@ -141,11 +147,12 @@ def startGame(difficultyLevel):
 
                 if checkBtn.collidepoint(mouse_x, mouse_y):
                     if isBoardFull(myBoard):
-                        gameWonScreen()
-                        print("Solved it woohoo!")
-                    else:
-                        gameLostScreen()
-                        print("Nope still missing stuff...")
+                        if boards_match(myBoard, solutionBoard):
+                            gameWonScreen()
+                            print("Solved it woohoo!")
+                        else:
+                            gameLostScreen()
+                            print("Nope still missing stuff...")
             
 
                 if resetBtn.collidepoint(mouse_x, mouse_y):
