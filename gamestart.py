@@ -2,169 +2,178 @@ import pygame
 import sys
 from sudoku_generator import SudokuGenerator
 
+# pgygame setup
 pygame.init()
 
-WIDTH = 600
-HEIGHT = 700
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Sudoku")
+# Window size
+screen_width, Screen_Height = 600, 700
+screen = pygame.display.set_mode((screen_width, Screen_Height))
+pygame.display.set_caption("Silly Sudoku")
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GREY = (160, 160, 160)
-BLUE = (0, 102, 204)
-GOLD = (255, 215, 0)
-LIGHT_BLUE = (173, 216, 230)
+# Colors
+milk_white = (255, 255, 255)
+voidBlack = (0, 0, 0)
+grey_boring = (160, 160, 160)
+OceanBlue = (0, 102, 204)
+gold_sun = (255, 215, 0)
+skyBlue = (173, 216, 230)
 
-font_title = pygame.font.SysFont("comicsans", 60)
-font_button = pygame.font.SysFont("comicsans", 40)
-font_number = pygame.font.SysFont("comicsans", 40)
+# Fonts
+bigFont = pygame.font.SysFont("comicsans", 60)
+small_font = pygame.font.SysFont("comicsans", 40)
 
-easy_button = pygame.Rect(200, 300, 200, 50)
-medium_button = pygame.Rect(200, 400, 200, 50)
-hard_button = pygame.Rect(200, 500, 200, 50)
+# Buttons for difficulties
+easyBox = pygame.Rect(200, 300, 200, 50)
+medium_box = pygame.Rect(200, 400, 200, 50)
+HardBox = pygame.Rect(200, 500, 200, 50)
 
-def start_game(difficulty):
-    running = True
+def startGame(difficultyLevel):
+    playing = True
     selected_row = None
-    selected_col = None
+    selectedCol = None
 
-    if difficulty == "easy":
-        removed = 30
-    elif difficulty == "medium":
-        removed = 40
+    if difficultyLevel == "easy":
+        blanks = 30
+    elif difficultyLevel == "medium":
+        blanks = 40
     else:
-        removed = 50
+        blanks = 50
 
-    sudoku = SudokuGenerator(9, removed)
-    sudoku.fill_values()
-    sudoku.remove_cells()
-    board = sudoku.get_board()
-    original_board = [row[:] for row in board]
+    # make the sudoku board
+    sudokuMagic = SudokuGenerator(blanks)
+    sudokuMagic.fill_values()
+    sudokuMagic.remove_cells()
+    myBoard = sudokuMagic.get_board()
+    originalBoard = [row[:] for row in myBoard]
 
-    check_button = pygame.Rect(200, 660, 200, 30)
+    checkBtn = pygame.Rect(200, 660, 200, 30)
 
-    while running:
-        screen.fill(WHITE)
+    while playing:
+        screen.fill(milk_white)
 
-        if selected_row is not None and selected_col is not None:
-            highlight_rect = pygame.Rect(50 + selected_col*55, 150 + selected_row*55, 55, 55)
-            pygame.draw.rect(screen, GOLD, highlight_rect)
+        if selected_row is not None and selectedCol is not None:
+            pygame.draw.rect(screen, gold_sun, (50 + selectedCol * 55, 150 + selected_row * 55, 55, 55))
 
+        # draw the lines
         for i in range(10):
             if i % 3 == 0:
-                color = BLUE
+                color = OceanBlue
                 thickness = 4
             else:
-                color = BLACK
+                color = voidBlack
                 thickness = 2
-            pygame.draw.line(screen, color, (50 + i*55, 150), (50 + i*55, 150 + 495), thickness)
-            pygame.draw.line(screen, color, (50, 150 + i*55), (50 + 495, 150 + i*55), thickness)
+            pygame.draw.line(screen, color, (50 + i * 55, 150), (50 + i * 55, 645), thickness)
+            pygame.draw.line(screen, color, (50, 150 + i * 55), (545, 150 + i * 55), thickness)
 
-        for row in range(9):
-            for col in range(9):
-                if board[row][col] != 0:
-                    if original_board[row][col] != 0:
-                        num_color = GREY
+        # draw numbers
+        for r in range(9):
+            for c in range(9):
+                if myBoard[r][c] != 0:
+                    if originalBoard[r][c] != 0:
+                        num_color = grey_boring
                     else:
-                        num_color = BLACK
-                    num_surface = font_number.render(str(board[row][col]), True, num_color)
-                    num_rect = num_surface.get_rect(center=(50 + col*55 + 27, 150 + row*55 + 27))
-                    screen.blit(num_surface, num_rect)
+                        num_color = voidBlack
+                    num_surface = small_font.render(str(myBoard[r][c]), True, num_color)
+                    screen.blit(num_surface, (50 + c * 55 + 15, 150 + r * 55 + 10))
 
-        title_text = font_title.render(f"{difficulty.title()} Sudoku", True, BLACK)
-        title_rect = title_text.get_rect(center=(WIDTH // 2, 50))
-        screen.blit(title_text, title_rect)
+        # title
+        title = bigFont.render(f"{difficultyLevel.title()} Sudoku", True, voidBlack)
+        screen.blit(title, (screen_width // 2 - title.get_width() // 2, 50))
 
-        pygame.draw.rect(screen, BLUE, check_button)
-        check_text = font_button.render("Check Puzzle", True, WHITE)
-        screen.blit(check_text, (check_button.x + 10, check_button.y))
+        # check puzzle btn
+        pygame.draw.rect(screen, OceanBlue, checkBtn)
+        checkText = small_font.render("Check Puzzle", True, milk_white)
+        screen.blit(checkText, (checkBtn.x + 10, checkBtn.y))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                playing = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                if check_button.collidepoint(mouse_x, mouse_y):
-                    if check_board(board):
-                        print("Puzzle solved correctly!")
+
+                if checkBtn.collidepoint(mouse_x, mouse_y):
+                    if isBoardFull(myBoard):
+                        print("Solved it woohoo!")
                     else:
-                        print("Puzzle not solved yet.")
+                        print("Nope still missing stuff...")
 
                 if 50 <= mouse_x <= 545 and 150 <= mouse_y <= 645:
-                    selected_col = (mouse_x - 50) // 55
+                    selectedCol = (mouse_x - 50) // 55
                     selected_row = (mouse_y - 150) // 55
 
             if event.type == pygame.KEYDOWN:
-                if selected_row is not None and selected_col is not None:
-                    if original_board[selected_row][selected_col] == 0:
+                if selected_row is not None and selectedCol is not None:
+                    if originalBoard[selected_row][selectedCol] == 0:
                         if event.key == pygame.K_1:
-                            board[selected_row][selected_col] = 1
+                            myBoard[selected_row][selectedCol] = 1
                         if event.key == pygame.K_2:
-                            board[selected_row][selected_col] = 2
+                            myBoard[selected_row][selectedCol] = 2
                         if event.key == pygame.K_3:
-                            board[selected_row][selected_col] = 3
+                            myBoard[selected_row][selectedCol] = 3
                         if event.key == pygame.K_4:
-                            board[selected_row][selected_col] = 4
+                            myBoard[selected_row][selectedCol] = 4
                         if event.key == pygame.K_5:
-                            board[selected_row][selected_col] = 5
+                            myBoard[selected_row][selectedCol] = 5
                         if event.key == pygame.K_6:
-                            board[selected_row][selected_col] = 6
+                            myBoard[selected_row][selectedCol] = 6
                         if event.key == pygame.K_7:
-                            board[selected_row][selected_col] = 7
+                            myBoard[selected_row][selectedCol] = 7
                         if event.key == pygame.K_8:
-                            board[selected_row][selected_col] = 8
+                            myBoard[selected_row][selectedCol] = 8
                         if event.key == pygame.K_9:
-                            board[selected_row][selected_col] = 9
-                        if event.key == pygame.K_BACKSPACE or event.key == pygame.K_DELETE:
-                            board[selected_row][selected_col] = 0
+                            myBoard[selected_row][selectedCol] = 9
+                        if event.key in [pygame.K_BACKSPACE, pygame.K_DELETE]:
+                            myBoard[selected_row][selectedCol] = 0
 
         pygame.display.update()
 
     pygame.quit()
     sys.exit()
-def check_board(board):
+
+def isBoardFull(board):
     for row in board:
-        for num in row:
-            if num == 0:
+        for thingy in row:
+            if thingy == 0:
                 return False
     return True
 
 def main():
-    running = True
-    selected_difficulty = None
+    choosing = True
+    Difficulty = None
 
-    while running:
-        screen.fill(WHITE)
+    while choosing:
+        screen.fill(milk_white)
         mouse_pos = pygame.mouse.get_pos()
 
-        title_text = font_title.render("Sudoku", True, BLACK)
-        title_rect = title_text.get_rect(center=(WIDTH // 2, 100))
-        screen.blit(title_text, title_rect)
+        # title
+        big_title = bigFont.render("Silly Sudoku", True, voidBlack)
+        screen.blit(big_title, (screen_width // 2 - big_title.get_width() // 2, 100))
 
-        if easy_button.collidepoint(mouse_pos):
-            pygame.draw.rect(screen, LIGHT_BLUE, easy_button)
+        # draw buttons
+        if easyBox.collidepoint(mouse_pos):
+            pygame.draw.rect(screen, skyBlue, easyBox)
         else:
-            pygame.draw.rect(screen, GREY, easy_button)
+            pygame.draw.rect(screen, grey_boring, easyBox)
 
-        if medium_button.collidepoint(mouse_pos):
-            pygame.draw.rect(screen, LIGHT_BLUE, medium_button)
+        if medium_box.collidepoint(mouse_pos):
+            pygame.draw.rect(screen, skyBlue, medium_box)
         else:
-            pygame.draw.rect(screen, GREY, medium_button)
+            pygame.draw.rect(screen, grey_boring, medium_box)
 
-        if hard_button.collidepoint(mouse_pos):
-            pygame.draw.rect(screen, LIGHT_BLUE, hard_button)
+        if HardBox.collidepoint(mouse_pos):
+            pygame.draw.rect(screen, skyBlue, HardBox)
         else:
-            pygame.draw.rect(screen, GREY, hard_button)
+            pygame.draw.rect(screen, grey_boring, HardBox)
 
-        easy_text = font_button.render("Easy", True, BLACK)
-        medium_text = font_button.render("Medium", True, BLACK)
-        hard_text = font_button.render("Hard", True, BLACK)
+        # button text
+        easy_label = small_font.render("Easy", True, voidBlack)
+        medium_label = small_font.render("Medium", True, voidBlack)
+        hard_label = small_font.render("Hard", True, voidBlack)
 
-        screen.blit(easy_text, (easy_button.x + 50, easy_button.y + 5))
-        screen.blit(medium_text, (medium_button.x + 30, medium_button.y + 5))
-        screen.blit(hard_text, (hard_button.x + 50, hard_button.y + 5))
+        screen.blit(easy_label, (easyBox.x + 60, easyBox.y + 5))
+        screen.blit(medium_label, (medium_box.x + 35, medium_box.y + 5))
+        screen.blit(hard_label, (HardBox.x + 60, HardBox.y + 5))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -172,20 +181,20 @@ def main():
                 sys.exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if easy_button.collidepoint(mouse_pos):
-                    selected_difficulty = "easy"
-                    running = False
-                if medium_button.collidepoint(mouse_pos):
-                    selected_difficulty = "medium"
-                    running = False
-                if hard_button.collidepoint(mouse_pos):
-                    selected_difficulty = "hard"
-                    running = False
+                if easyBox.collidepoint(mouse_pos):
+                    Difficulty = "easy"
+                    choosing = False
+                if medium_box.collidepoint(mouse_pos):
+                    Difficulty = "medium"
+                    choosing = False
+                if HardBox.collidepoint(mouse_pos):
+                    Difficulty = "hard"
+                    choosing = False
 
         pygame.display.update()
 
-    if selected_difficulty:
-        start_game(selected_difficulty)
+    if Difficulty:
+        startGame(Difficulty)
 
 if __name__ == "__main__":
     main()
