@@ -270,16 +270,6 @@ sudoku.fill_values()
 sudoku.remove_cells()
 board = sudoku.get_board()
 
-run = True
-run2 = True
-while run:
-    for event in pygame.event.get(): # SCreen window loop
-        if event.type == pygame.QUIT:
-            run = False
-
-    screen.fill((255,255,255))
-
-    pygame.display.flip()
 # pygame.init()
 # screen = pygame.display.set_mode((600, 600))
 #
