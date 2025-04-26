@@ -47,6 +47,9 @@ def startGame(difficultyLevel):
     originalBoard = [row[:] for row in myBoard]
 
     checkBtn = pygame.Rect(200, 660, 200, 30)
+    resetBtn = pygame.Rect(50, 660, 100, 30)
+    restartBtn = pygame.Rect(350, 660, 100, 30)
+    exitBtn = pygame.Rect(470, 660, 80, 30)
 
     while playing:
         screen.fill(milk_white)
@@ -85,6 +88,19 @@ def startGame(difficultyLevel):
         checkText = small_font.render("Check Puzzle", True, milk_white)
         screen.blit(checkText, (checkBtn.x + 10, checkBtn.y))
 
+        # Draw the reset, restart, and exit buttons
+        pygame.draw.rect(screen, skyBlue, resetBtn)
+        pygame.draw.rect(screen, skyBlue, restartBtn)
+        pygame.draw.rect(screen, skyBlue, exitBtn)
+
+        resetText = small_font.render("Reset", True, voidBlack)
+        restartText = small_font.render("Restart", True, voidBlack)
+        exitText = small_font.render("Exit", True, voidBlack)
+
+        screen.blit(resetText, (resetBtn.x + 10, resetBtn.y))
+        screen.blit(restartText, (restartBtn.x + 5, restartBtn.y))
+        screen.blit(exitText, (exitBtn.x + 10, exitBtn.y))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 playing = False
@@ -97,6 +113,17 @@ def startGame(difficultyLevel):
                         print("Solved it woohoo!")
                     else:
                         print("Nope still missing stuff...")
+
+                if resetBtn.collidepoint(mouse_x, mouse_y):
+                    myBoard = [row[:] for row in originalBoard]
+                    print("Board has been reset.")
+
+                if restartBtn.collidepoint(mouse_x, mouse_y):
+                    main()
+
+                if exitBtn.collidepoint(mouse_x, mouse_y):
+                    pygame.quit()
+                    sys.exit()
 
                 if 50 <= mouse_x <= 545 and 150 <= mouse_y <= 645:
                     selectedCol = (mouse_x - 50) // 55

@@ -258,26 +258,26 @@ def generate_sudoku(size, removed):
     board = sudoku.get_board()
     return board
 
-pygame.init()
-screen = pygame.display.set_mode((600, 600))  
-
-# Generating board
-
-sudoku = SudokuGenerator(removed_cells=0)
-sudoku.fill_values()
-board = sudoku.get_board()
-
-run = True
-run2 = True
-while run:
-    for event in pygame.event.get(): # SCreen window loop
-        if event.type == pygame.QUIT:
-            run = False
-
-    screen.fill((255,255,255))
-
-    pygame.display.flip()
-    
-def test():
-    sudoku.print_board()
-test()
+# pygame.init()
+# screen = pygame.display.set_mode((600, 600))
+#
+# # Generating board
+#
+# sudoku = SudokuGenerator(removed_cells=0)
+# sudoku.fill_values()
+# board = sudoku.get_board()
+#
+# run = True
+# run2 = True
+# while run:
+#     for event in pygame.event.get(): # SCreen window loop
+#         if event.type == pygame.QUIT:
+#             run = False
+#
+#     screen.fill((255,255,255))
+#
+#     pygame.display.flip()
+#
+# def test():
+#     sudoku.print_board()
+# test()
