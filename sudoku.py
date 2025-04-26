@@ -153,6 +153,10 @@ def startGame(difficultyLevel):
                         else:
                             gameLostScreen()
                             print("Nope still missing stuff...")
+                    else:
+                        gameLostScreen()
+                        print("Nope still missing stuff...")
+
             
 
                 if resetBtn.collidepoint(mouse_x, mouse_y):
