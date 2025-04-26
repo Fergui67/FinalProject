@@ -235,6 +235,8 @@ class SudokuGenerator:
                 continue # If 0 is already present, skips it
             x = x + 1
 
+            pygame.display.update()
+
 '''
 DO NOT CHANGE
 Provided for students
@@ -265,6 +267,7 @@ screen = pygame.display.set_mode((600, 600))
 
 sudoku = SudokuGenerator(removed_cells=0)
 sudoku.fill_values()
+sudoku.remove_cells()
 board = sudoku.get_board()
 
 run = True
@@ -277,7 +280,3 @@ while run:
     screen.fill((255,255,255))
 
     pygame.display.flip()
-    
-def test():
-    sudoku.print_board()
-test()

@@ -1,7 +1,20 @@
 import pygame
 import sys
 from sudoku_generator import SudokuGenerator
+def gameWonScreen():
+    running = True
+    while running:
+        screen.fill((255,255,255))
 
+        win_text = bigFont.render("You Won!", True, OceanBlue)
+        screen.blit(win_text, (screen_width // 2 - win_text.get_width() // 2, Screen_Height // 2 - win_text.get_height() // 2))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+                sys.exit()
+        pygame.display.update()
 # pgygame setup
 pygame.init()
 
@@ -42,6 +55,10 @@ def startGame(difficultyLevel):
     # make the sudoku board
     sudokuMagic = SudokuGenerator(blanks)
     sudokuMagic.fill_values()
+    solutionBoard = [row[:] for row in sudokuMagic.get_board()]
+    print("Solution:")
+    for row in solutionBoard:
+        print(row) 
     sudokuMagic.remove_cells()
     myBoard = sudokuMagic.get_board()
     originalBoard = [row[:] for row in myBoard]
@@ -94,6 +111,7 @@ def startGame(difficultyLevel):
 
                 if checkBtn.collidepoint(mouse_x, mouse_y):
                     if isBoardFull(myBoard):
+                        gameWonScreen()
                         print("Solved it woohoo!")
                     else:
                         print("Nope still missing stuff...")
@@ -128,9 +146,10 @@ def startGame(difficultyLevel):
 
         pygame.display.update()
 
-    pygame.quit()
-    sys.exit()
-
+    if event.type == pygame.QUIT:
+        playing = False
+        pygame.quit()
+        sys.exit()
 def isBoardFull(board):
     for row in board:
         for thingy in row:
