@@ -260,7 +260,6 @@ def generate_sudoku(size, removed):
     board = sudoku.get_board()
     return board
 
-<<<<<<< HEAD
 pygame.init()
 screen = pygame.display.set_mode((600, 600))  
 
@@ -281,7 +280,6 @@ while run:
     screen.fill((255,255,255))
 
     pygame.display.flip()
-=======
 # pygame.init()
 # screen = pygame.display.set_mode((600, 600))
 #
@@ -305,4 +303,3 @@ while run:
 # def test():
 #     sudoku.print_board()
 # test()
->>>>>>> db23ca70e82570f5bcf5ebf05d06c44033650449

@@ -6,8 +6,22 @@ def gameWonScreen():
     while running:
         screen.fill((255,255,255))
 
-        win_text = bigFont.render("You Won!", True, OceanBlue)
-        screen.blit(win_text, (screen_width // 2 - win_text.get_width() // 2, Screen_Height // 2 - win_text.get_height() // 2))
+        winText = bigFont.render("You Won!", True, OceanBlue)
+        screen.blit(winText, (screen_width // 2 - winText.get_width() // 2, Screen_Height // 2 - winText.get_height() // 2))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+                sys.exit()
+        pygame.display.update()
+def gameLostScreen():
+    running = True
+    while running:
+        screen.fill((255,255,255))
+
+        lostText = bigFont.render("Game Over!", True, OceanBlue)
+        screen.blit(lostText, (screen_width // 2 - lostText.get_width() // 2, Screen_Height // 2 - lostText.get_height() // 2))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -130,7 +144,9 @@ def startGame(difficultyLevel):
                         gameWonScreen()
                         print("Solved it woohoo!")
                     else:
+                        gameLostScreen()
                         print("Nope still missing stuff...")
+            
 
                 if resetBtn.collidepoint(mouse_x, mouse_y):
                     myBoard = [row[:] for row in originalBoard]
