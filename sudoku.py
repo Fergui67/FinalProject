@@ -39,7 +39,7 @@ def gameLostScreen():
 pygame.init()
 
 # Window size
-screen_width, Screen_Height = 600, 700
+screen_width, Screen_Height = 650, 775
 screen = pygame.display.set_mode((screen_width, Screen_Height))
 pygame.display.set_caption("Silly Sudoku")
 
@@ -83,10 +83,10 @@ def startGame(difficultyLevel):
     myBoard = sudokuMagic.get_board()
     originalBoard = [row[:] for row in myBoard]
 
-    checkBtn = pygame.Rect(200, 660, 200, 30)
-    resetBtn = pygame.Rect(50, 660, 100, 30)
-    restartBtn = pygame.Rect(350, 660, 100, 30)
-    exitBtn = pygame.Rect(470, 660, 80, 30)
+    resetBtn = pygame.Rect(80, 700, 120, 40)
+    checkBtn = pygame.Rect(220, 700, 120, 40)
+    restartBtn = pygame.Rect(360, 700, 120, 40)
+    exitBtn = pygame.Rect(500, 700, 120, 40)
 
     while playing:
         screen.fill(milk_white)
@@ -121,9 +121,10 @@ def startGame(difficultyLevel):
         screen.blit(title, (screen_width // 2 - title.get_width() // 2, 50))
 
         # check puzzle btn
-        pygame.draw.rect(screen, OceanBlue, checkBtn)
-        checkText = small_font.render("Check Puzzle", True, milk_white)
+        pygame.draw.rect(screen, skyBlue, checkBtn)
+        checkText = small_font.render("Check", True, voidBlack)
         screen.blit(checkText, (checkBtn.x + 10, checkBtn.y))
+
 
         # Draw the reset, restart, and exit buttons
         pygame.draw.rect(screen, skyBlue, resetBtn)
@@ -132,7 +133,7 @@ def startGame(difficultyLevel):
 
         resetText = small_font.render("Reset", True, voidBlack)
         restartText = small_font.render("Restart", True, voidBlack)
-        exitText = small_font.render("Exit", True, voidBlack)
+        exitText = small_font.render(" Exit", True, voidBlack)
 
         screen.blit(resetText, (resetBtn.x + 10, resetBtn.y))
         screen.blit(restartText, (restartBtn.x + 5, restartBtn.y))
